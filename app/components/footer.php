@@ -44,8 +44,9 @@
 
   <div class="container footer-bottom">
     <div class="footer-meta">
-      <span>Việt Nam · Tiếng Việt · VND</span>
-      <small>© 2026 Tuyển Chọn. Bản thiết kế minh họa cho cửa hàng độc lập, không phải website chính thức của Nike.</small>
+      <small>© 2026 Nikez - Nhóm 4 LTW Bảo lưu mọi quyền.
+
+</small>
     </div>
     <div class="payment">VISA &nbsp; Mastercard &nbsp; Chuyển khoản &nbsp; COD</div>
   </div>

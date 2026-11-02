@@ -1,0 +1,103 @@
+.khung_danhmuc_qc{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: minmax(130px, auto);
+    padding: 25px;
+    gap: 25px;
+
+    grid-template-areas:
+    "dm1 dm2 dm2 dm2"
+    "dm4 dm4 dm3 dm3"
+}
+
+.danhmuc_qc{
+    background-color: rgb(159, 159, 86);
+    color: wheat;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 2em;
+    height: auto;
+    overflow: hidden;
+}
+
+.danhmuc_qc img{
+    height: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+}
+
+
+.danhmuc_qc:hover img{
+    transform: scale(1.03);
+}
+
+
+#text_danhmuc{
+    text-align: center;
+    color: red;
+}
+
+
+
+
+
+.danhmuc1{
+grid-area: dm1;}
+
+.danhmuc2{
+grid-area: dm2;}
+
+.danhmuc3{
+grid-area: dm3;}
+
+.danhmuc4{
+grid-area: dm4;}
+
+/* san pham*/
+.khung_sp_moi{
+    background-color: darkcyan;
+    height: 150px;
+}
+
+
+.khung_sp_banchay{
+    background-color: darkcyan;
+    height: 150px;
+
+}
+
+
+.khung_gioithieu{
+    background-color: orange;
+    display: grid;
+    text-align: center;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(1fr, auto);
+    grid-template-areas: 
+    "text_gt text_gt"
+    "logo_gt noidung_gt"
+    "logo_gt noidung_gt"
+    
+
+
+}
+
+.text_gioithieu{
+    background-color: bisque;
+    grid-area: text_gt;}
+
+}
+
+.logo_gioithieu{
+    grid-area: logo_gt;}
+
+}
+
+.noidung_gioithieu{
+    grid-area: nd_gt;}
+
+}

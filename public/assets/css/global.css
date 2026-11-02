@@ -70,7 +70,12 @@ button { cursor: pointer; border: 0; background: transparent; }
 .khung_quangcao{
   background-color: red;
   width: 100%;
-  height: 90px;;
+  display: flex;
+  height: 410px;
+  padding: 24px 24px 24px 56px;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
 }
 
 .noidung_quangcao{
@@ -78,6 +83,8 @@ button { cursor: pointer; border: 0; background: transparent; }
   width: 80%;
   height: 60px;;
 }
+
+
 
 
 /* Promo Banner */

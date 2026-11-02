@@ -9,10 +9,9 @@
 
     <nav class="main-nav" aria-label="Menu chính">
       <a href="index.php?page=catalog">Hàng mới</a>
-      <a href="index.php?page=catalog1">Nam</a>
+      <a href="index.php?page=catalog">Nam</a>
       <a href="index.php?page=catalog">Nữ</a>
       <a href="index.php?page=catalog">Trẻ em</a>
-      <a href="index.php?page=catalog">Chạy bộ</a>
       <a href="index.php?page=catalog">Bộ sưu tập</a>
     </nav>
 
