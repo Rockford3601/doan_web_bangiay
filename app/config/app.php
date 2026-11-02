@@ -11,16 +11,23 @@ $pages = [
         'css'   => 'home.css',
         'file'  => 'pages/home.php'
     ],
-    'catalog' => [
+    'catalog_loi' => [
         'title' => 'Danh sách giày | Tuyển Chọn',
-        'css'   => 'catalog.css',
-        'file'  => 'pages/catalog.php'
+        'css'   => 'catalog_loi.css',
+        'file'  => 'pages/catalog_loi.php'
     ],
 
      'giaodien' => [
         'title' => 'TEST GIAO DIỆN | TEST',
-        'css'   => 'giaodien1.css',
+        'css'   => 'giaodien.css',
         'file'  => 'pages/giaodien.php'
+    ],
+
+
+    'catalog' => [
+        'title' => 'TEST SANPHAM | TEST2',
+        'css'   => 'catalog.css',
+        'file'  => 'pages/catalog.php'
     ],
 
     'cart' => [

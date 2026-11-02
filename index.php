@@ -4,6 +4,7 @@ define('SECURE_CHECK', true);
 
 // 1. Load Cấu hình hệ thống (Đã thêm / trước app/)
 require_once __DIR__ . '/app/config/app.php';
+require_once __DIR__ . '/app/config/database.php';
 
 // 2. Xử lý tham số 'page' từ URL
 $page_key = isset($_GET['page']) ? trim($_GET['page']) : 'home';
