@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="340" viewBox="0 0 1100 340" font-family="Arial,Helvetica,sans-serif" font-size="13">
+  <rect width="1100" height="340" fill="#fff" rx="12"/>
+
+  <!-- Title -->
+  <text x="550" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#111">BẢNG QUY ĐỔI SIZE GIÀY</text>
+
+  <!-- Column headers (EU sizes) -->
+  <!-- col widths: label=90, rest=68 each -->
+  <!-- y start = 42 -->
+  <!-- Header row bg -->
+  <rect x="0" y="40" width="1100" height="38" fill="#1a1a1a" rx="0"/>
+
+  <!-- Header texts -->
+  <text x="45"   y="64" text-anchor="middle" fill="#fff" font-weight="bold">Size</text>
+  <text x="135"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">35.5</text>
+  <text x="203"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">36</text>
+  <text x="271"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">36.5</text>
+  <text x="339"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">37</text>
+  <text x="407"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">37.5</text>
+  <text x="475"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">38</text>
+  <text x="543"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">38.5</text>
+  <text x="611"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">39</text>
+  <text x="679"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">39.5</text>
+  <text x="747"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">40</text>
+  <text x="815"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">40.5</text>
+  <text x="883"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">41</text>
+  <text x="951"  y="64" text-anchor="middle" fill="#fff" font-weight="bold">41.5</text>
+  <text x="1019" y="64" text-anchor="middle" fill="#fff" font-weight="bold">42</text>
+  <text x="1075" y="64" text-anchor="middle" fill="#fff" font-weight="bold">42.5</text>
+
+  <!-- ROW 1: US-Men (stripe) -->
+  <rect x="0" y="78" width="1100" height="38" fill="#f7f7f7"/>
+  <text x="45"   y="102" text-anchor="middle" fill="#111" font-weight="bold">US-Men</text>
+  <text x="135"  y="102" text-anchor="middle" fill="#333">3.5</text>
+  <text x="203"  y="102" text-anchor="middle" fill="#333">4</text>
+  <text x="271"  y="102" text-anchor="middle" fill="#333">4.5</text>
+  <text x="339"  y="102" text-anchor="middle" fill="#333">5</text>
+  <text x="407"  y="102" text-anchor="middle" fill="#333">5.5</text>
+  <text x="475"  y="102" text-anchor="middle" fill="#333">6</text>
+  <text x="543"  y="102" text-anchor="middle" fill="#333">6.5</text>
+  <text x="611"  y="102" text-anchor="middle" fill="#333">7</text>
+  <text x="679"  y="102" text-anchor="middle" fill="#333">7.5</text>
+  <text x="747"  y="102" text-anchor="middle" fill="#333">8</text>
+  <text x="815"  y="102" text-anchor="middle" fill="#333">8.5</text>
+  <text x="883"  y="102" text-anchor="middle" fill="#333">9</text>
+  <text x="951"  y="102" text-anchor="middle" fill="#333">9.5</text>
+  <text x="1019" y="102" text-anchor="middle" fill="#333">10</text>
+  <text x="1075" y="102" text-anchor="middle" fill="#333">10.5</text>
+
+  <!-- ROW 2: US-Women -->
+  <rect x="0" y="116" width="1100" height="38" fill="#fff"/>
+  <text x="45"   y="140" text-anchor="middle" fill="#111" font-weight="bold">US-Women</text>
+  <text x="135"  y="140" text-anchor="middle" fill="#333">5</text>
+  <text x="203"  y="140" text-anchor="middle" fill="#333">5.5</text>
+  <text x="271"  y="140" text-anchor="middle" fill="#333">6</text>
+  <text x="339"  y="140" text-anchor="middle" fill="#333">6.5</text>
+  <text x="407"  y="140" text-anchor="middle" fill="#333">7</text>
+  <text x="475"  y="140" text-anchor="middle" fill="#333">7.5</text>
+  <text x="543"  y="140" text-anchor="middle" fill="#333">8</text>
+  <text x="611"  y="140" text-anchor="middle" fill="#333">8.5</text>
+  <text x="679"  y="140" text-anchor="middle" fill="#333">9</text>
+  <text x="747"  y="140" text-anchor="middle" fill="#333">9.5</text>
+  <text x="815"  y="140" text-anchor="middle" fill="#333">10</text>
+  <text x="883"  y="140" text-anchor="middle" fill="#333">10.5</text>
+  <text x="951"  y="140" text-anchor="middle" fill="#333">11</text>
+  <text x="1019" y="140" text-anchor="middle" fill="#333">11.5</text>
+  <text x="1075" y="140" text-anchor="middle" fill="#333">12</text>
+
+  <!-- ROW 3: UK (stripe) -->
+  <rect x="0" y="154" width="1100" height="38" fill="#f7f7f7"/>
+  <text x="45"   y="178" text-anchor="middle" fill="#111" font-weight="bold">UK</text>
+  <text x="135"  y="178" text-anchor="middle" fill="#333">3</text>
+  <text x="203"  y="178" text-anchor="middle" fill="#333">3.5</text>
+  <text x="271"  y="178" text-anchor="middle" fill="#333">4</text>
+  <text x="339"  y="178" text-anchor="middle" fill="#333">4.5</text>
+  <text x="407"  y="178" text-anchor="middle" fill="#333">5</text>
+  <text x="475"  y="178" text-anchor="middle" fill="#333">5.5</text>
+  <text x="543"  y="178" text-anchor="middle" fill="#333">6</text>
+  <text x="611"  y="178" text-anchor="middle" fill="#333">6.5</text>
+  <text x="679"  y="178" text-anchor="middle" fill="#333">7</text>
+  <text x="747"  y="178" text-anchor="middle" fill="#333">7.5</text>
+  <text x="815"  y="178" text-anchor="middle" fill="#333">8</text>
+  <text x="883"  y="178" text-anchor="middle" fill="#333">8.5</text>
+  <text x="951"  y="178" text-anchor="middle" fill="#333">9</text>
+  <text x="1019" y="178" text-anchor="middle" fill="#333">9.5</text>
+  <text x="1075" y="178" text-anchor="middle" fill="#333">10</text>
+
+  <!-- ROW 4: CM/JP -->
+  <rect x="0" y="192" width="1100" height="38" fill="#fff"/>
+  <text x="45"   y="216" text-anchor="middle" fill="#111" font-weight="bold">CM/JP</text>
+  <text x="135"  y="216" text-anchor="middle" fill="#333">22.5</text>
+  <text x="203"  y="216" text-anchor="middle" fill="#333">23</text>
+  <text x="271"  y="216" text-anchor="middle" fill="#333">23.5</text>
+  <text x="339"  y="216" text-anchor="middle" fill="#333">23.5</text>
+  <text x="407"  y="216" text-anchor="middle" fill="#333">24</text>
+  <text x="475"  y="216" text-anchor="middle" fill="#333">24</text>
+  <text x="543"  y="216" text-anchor="middle" fill="#333">24.5</text>
+  <text x="611"  y="216" text-anchor="middle" fill="#333">25</text>
+  <text x="679"  y="216" text-anchor="middle" fill="#333">25</text>
+  <text x="747"  y="216" text-anchor="middle" fill="#333">25.5</text>
+  <text x="815"  y="216" text-anchor="middle" fill="#333">26</text>
+  <text x="883"  y="216" text-anchor="middle" fill="#333">26</text>
+  <text x="951"  y="216" text-anchor="middle" fill="#333">26.5</text>
+  <text x="1019" y="216" text-anchor="middle" fill="#333">27</text>
+  <text x="1075" y="216" text-anchor="middle" fill="#333">27</text>
+
+  <!-- ROW 5: EU (stripe) -->
+  <rect x="0" y="230" width="1100" height="38" fill="#f7f7f7"/>
+  <text x="45"   y="254" text-anchor="middle" fill="#111" font-weight="bold">EU</text>
+  <text x="135"  y="254" text-anchor="middle" fill="#333">35.5</text>
+  <text x="203"  y="254" text-anchor="middle" fill="#333">36</text>
+  <text x="271"  y="254" text-anchor="middle" fill="#333">36.5</text>
+  <text x="339"  y="254" text-anchor="middle" fill="#333">37</text>
+  <text x="407"  y="254" text-anchor="middle" fill="#333">37.5</text>
+  <text x="475"  y="254" text-anchor="middle" fill="#333">38</text>
+  <text x="543"  y="254" text-anchor="middle" fill="#333">38.5</text>
+  <text x="611"  y="254" text-anchor="middle" fill="#333">39</text>
+  <text x="679"  y="254" text-anchor="middle" fill="#333">39.5</text>
+  <text x="747"  y="254" text-anchor="middle" fill="#333">40</text>
+  <text x="815"  y="254" text-anchor="middle" fill="#333">40.5</text>
+  <text x="883"  y="254" text-anchor="middle" fill="#333">41</text>
+  <text x="951"  y="254" text-anchor="middle" fill="#333">41.5</text>
+  <text x="1019" y="254" text-anchor="middle" fill="#333">42</text>
+  <text x="1075" y="254" text-anchor="middle" fill="#333">42.5</text>
+
+  <!-- ROW 6: Foot Length -->
+  <rect x="0" y="268" width="1100" height="38" fill="#fff"/>
+  <text x="45"   y="291" text-anchor="middle" fill="#111" font-weight="bold">Foot (cm)</text>
+  <text x="135"  y="291" text-anchor="middle" fill="#333">21.6</text>
+  <text x="203"  y="291" text-anchor="middle" fill="#333">22.0</text>
+  <text x="271"  y="291" text-anchor="middle" fill="#333">22.4</text>
+  <text x="339"  y="291" text-anchor="middle" fill="#333">22.9</text>
+  <text x="407"  y="291" text-anchor="middle" fill="#333">23.3</text>
+  <text x="475"  y="291" text-anchor="middle" fill="#333">23.7</text>
+  <text x="543"  y="291" text-anchor="middle" fill="#333">24.1</text>
+  <text x="611"  y="291" text-anchor="middle" fill="#333">24.6</text>
+  <text x="679"  y="291" text-anchor="middle" fill="#333">25.0</text>
+  <text x="747"  y="291" text-anchor="middle" fill="#333">25.4</text>
+  <text x="815"  y="291" text-anchor="middle" fill="#333">25.9</text>
+  <text x="883"  y="291" text-anchor="middle" fill="#333">26.2</text>
+  <text x="951"  y="291" text-anchor="middle" fill="#333">26.7</text>
+  <text x="1019" y="291" text-anchor="middle" fill="#333">27.1</text>
+  <text x="1075" y="291" text-anchor="middle" fill="#333">27.5</text>
+
+  <!-- Bottom note -->
+  <text x="550" y="325" text-anchor="middle" font-size="12" fill="#888">* Đo chiều dài bàn chân từ gót đến ngón dài nhất (cm). Nếu ở giữa 2 size, chọn size lớn hơn.</text>
+
+  <!-- Grid lines (vertical) -->
+  <line x1="90"  y1="40" x2="90"  y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="158" y1="40" x2="158" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="226" y1="40" x2="226" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="294" y1="40" x2="294" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="362" y1="40" x2="362" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="430" y1="40" x2="430" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="498" y1="40" x2="498" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="566" y1="40" x2="566" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="634" y1="40" x2="634" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="702" y1="40" x2="702" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="770" y1="40" x2="770" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="838" y1="40" x2="838" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="906" y1="40" x2="906" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="974" y1="40" x2="974" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+  <line x1="1042" y1="40" x2="1042" y2="306" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Border -->
+  <rect x="0" y="40" width="1100" height="266" fill="none" stroke="#ccc" stroke-width="1" rx="0"/>
+</svg>
