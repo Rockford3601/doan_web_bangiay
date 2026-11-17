@@ -1,0 +1,5 @@
+# Tắt Directory Browsing (Ngăn xem danh sách file)
+Options -Indexes
+
+# Cấu hình UTF-8 mặc định
+AddDefaultCharset UTF-8

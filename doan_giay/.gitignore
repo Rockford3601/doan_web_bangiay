@@ -1,0 +1,20 @@
+# Ảnh do người dùng/admin tải lên (giữ lại .htaccess và .gitkeep)
+public/uploads/products/*
+!public/uploads/products/.htaccess
+!public/uploads/products/.gitkeep
+
+# File nén, log, cấu hình máy cá nhân
+*.rar
+*.zip
+*.log
+.env
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Khóa API và thư mục email demo
+app/config/secrets.php
+storage/outbox/*
+!storage/outbox/.htaccess
+!storage/outbox/.gitkeep
