@@ -1,0 +1,470 @@
+/* ============================================================
+   BỘ SƯU TẬP (COLLECTIONS) PAGE — Minimalist Redesign
+   Tokens: --bg #fff, --text #111, --muted #727272,
+           --line #e5e5e5, --accent #c74721
+   ============================================================ */
+
+.bst-container {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    box-sizing: border-box;
+}
+
+/* ── HEADER & BREADCRUMB ── */
+.bst-header {
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.bst-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #727272;
+    margin-bottom: 12px;
+}
+.bst-breadcrumb a {
+    color: #727272;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.bst-breadcrumb a:hover {
+    color: #111;
+}
+.bst-breadcrumb .current {
+    color: #111;
+    font-weight: 500;
+}
+
+.bst-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.bst-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    color: #111;
+}
+.bst-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #727272;
+    line-height: 1.5;
+}
+
+/* ── SPOTLIGHT BANNER ── */
+.bst-spotlight {
+    margin-bottom: 48px;
+}
+.bst-spotlight-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    background: #f8f8f8;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    overflow: hidden;
+    align-items: center;
+    transition: box-shadow 0.2s;
+}
+.bst-spotlight-inner:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+.bst-spotlight-img {
+    height: 100%;
+    min-height: 340px;
+    background: #efefef;
+    position: relative;
+    overflow: hidden;
+}
+.bst-spotlight-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+.bst-spotlight-inner:hover .bst-spotlight-img img {
+    transform: scale(1.03);
+}
+.bst-spotlight-content {
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+.bst-spotlight-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #c74721;
+    background: rgba(199, 71, 33, 0.08);
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+.bst-spotlight-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #111;
+    line-height: 1.2;
+}
+.bst-spotlight-desc {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+.bst-spotlight-action {
+    margin-top: 10px;
+}
+.bst-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #111;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.15s;
+}
+.bst-btn-primary:hover {
+    background: #c74721;
+    transform: translateX(2px);
+}
+
+/* ── SECTION HEADER ── */
+.bst-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 22px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.bst-section-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #111;
+}
+.bst-section-count {
+    font-size: 13px;
+    color: #727272;
+    font-weight: 500;
+}
+.bst-section-desc {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #727272;
+}
+.bst-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.bst-view-all:hover {
+    color: #c74721;
+}
+
+/* ── COLLECTION CARDS (3-COLUMN OR HORIZONTAL) ── */
+.bst-list-section {
+    margin-bottom: 56px;
+}
+.bst-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.bst-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.bst-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.bst-card-img-wrap {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    background: #f7f7f7;
+    overflow: hidden;
+}
+.bst-card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+}
+.bst-card:hover .bst-card-img-wrap img {
+    transform: scale(1.05);
+}
+
+.bst-card-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #111;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 4px;
+}
+
+.bst-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+}
+.bst-card-header {
+    margin-bottom: 10px;
+}
+.bst-card-sub {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #727272;
+    margin-bottom: 4px;
+}
+.bst-card-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    line-height: 1.3;
+}
+.bst-card-desc {
+    margin: 0 0 18px;
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.55;
+    flex: 1;
+}
+
+.bst-card-action {
+    margin-top: auto;
+}
+.bst-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #111;
+    padding-bottom: 2px;
+    transition: color 0.15s, border-color 0.15s;
+}
+.bst-card-btn:hover {
+    color: #c74721;
+    border-color: #c74721;
+}
+
+/* ── FEATURED PRODUCTS IN COLLECTION ── */
+.bst-products-section {
+    margin-top: 36px;
+}
+.bst-product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* Ensure product cards look minimalist & consistent */
+.bst-product-grid .product_cards {
+    background-color: #fff;
+    color: #111;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.bst-product-grid .product_cards:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+.bst-product-grid .card_img_wrap {
+    position: relative;
+    overflow: hidden;
+    background: #f7f7f7;
+}
+.bst-product-grid .card_img img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    background-color: #f7f7f7;
+    transition: transform 0.3s;
+}
+.bst-product-grid .product_cards:hover .card_img img {
+    transform: scale(1.04);
+}
+.bst-product-grid .card_info {
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+.bst-product-grid .cat_title {
+    font-size: 11px;
+    color: #727272;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.bst-product-grid .prod_name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+    margin: 2px 0;
+    line-height: 1.3;
+}
+.bst-product-grid .price_tag {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    margin: 4px 0 0;
+    font-weight: 700;
+}
+.bst-product-grid .price_tag .price_current {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+}
+.bst-product-grid .price_tag.price_tag_sale .price_current {
+    color: #c74721;
+}
+.bst-product-grid .price_tag .price_original {
+    font-size: 12px;
+    text-decoration: line-through;
+    color: #727272;
+    font-weight: 400;
+}
+.bst-product-grid .card_actions {
+    padding: 0 14px 12px;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS:
+   - Desktop: >= 1200px (4-col products, 3-col collections)
+   - Tablet: 768px - 1199px (2-col products, 2-col collections)
+   - Mobile: < 768px (1-col or 2-col compact, 1-col collections)
+   ============================================================ */
+@media (min-width: 1200px) {
+    .bst-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+    .bst-product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .bst-spotlight-inner {
+        grid-template-columns: 1fr;
+    }
+    .bst-spotlight-img {
+        min-height: 280px;
+    }
+    .bst-spotlight-content {
+        padding: 24px 28px;
+    }
+    .bst-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .bst-product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .bst-container {
+        padding: 16px 14px 40px;
+    }
+    .bst-title {
+        font-size: 22px;
+    }
+    .bst-spotlight-inner {
+        grid-template-columns: 1fr;
+        border-radius: 10px;
+    }
+    .bst-spotlight-img {
+        min-height: 200px;
+    }
+    .bst-spotlight-content {
+        padding: 20px 16px;
+    }
+    .bst-spotlight-title {
+        font-size: 22px;
+    }
+    .bst-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    .bst-card-img-wrap {
+        height: 200px;
+    }
+    .bst-product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .bst-product-grid .card_img img {
+        height: 170px;
+    }
+    .bst-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 440px) {
+    .bst-product-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,749 @@
+/* ==========================================================================
+   GIAODIEN.CSS - Tối ưu hóa & Đồng bộ giao diện trang giaodien.php
+   Dùng biến màu từ global.css: --bg, --bg-soft, --text, --muted, --line, --accent
+   ========================================================================== */
+
+/* Khung bọc chính của trang */
+.giaodien_main {
+    width: min(1280px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 10px 0 60px;
+    box-sizing: border-box;
+}
+
+/* Đường kẻ phân cách tinh tế */
+.giaodien_main hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 24px 0;
+}
+
+/* ==========================================================================
+   1. PHẦN SLIDESHOW QUẢNG CÁO SẢN PHẨM
+   ========================================================================== */
+.noidung {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.khung_quangcao {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #111111;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Từng slide */
+.slide_item {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    display: flex;
+    align-items: center;
+}
+
+.slide_item.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+}
+
+/* Ảnh nền của slide */
+.slide_img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.65);
+    transition: transform 6s ease;
+}
+
+.slide_item.active .slide_img {
+    transform: scale(1.04);
+}
+
+/* Nội dung văn bản nổi bật trên slide */
+.noidung_quangcao {
+    position: relative;
+    z-index: 2;
+    max-width: 580px;
+    padding: 30px 48px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.slide_tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #ffd600;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.slide_title {
+    margin: 0;
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.slide_desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.slide_btn_cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #111111;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 6px;
+    transition: background-color 0.2s, transform 0.2s, color 0.2s;
+}
+
+.slide_btn_cta:hover {
+    background: var(--accent);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Nút bấm chuyển slide trước / sau */
+.nut_chuyen {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.nut_chuyen:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.nut_truoc {
+    left: 20px;
+}
+
+.nut_sau {
+    right: 20px;
+}
+
+/* Chấm tròn báo chỉ số slide */
+.slide_dots {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.slide_dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slide_dots .dot.active {
+    width: 26px;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+/* ==========================================================================
+   2. TIÊU ĐỀ SECTION
+   ========================================================================== */
+#text_danhmuc {
+    text-align: center;
+    color: var(--text);
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 28px 0 16px;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   3. KHUNG DANH MỤC QUẢNG CÁO
+   ========================================================================== */
+.khung_danhmuc_qc {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(180px, auto);
+    padding: 0;
+    gap: 20px;
+    margin-bottom: 40px;
+
+    grid-template-areas:
+        "dm1 dm2 dm2 dm2"
+        "dm4 dm4 dm3 dm3";
+}
+
+.danhmuc_qc {
+    background-color: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.danhmuc_qc:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.danhmuc_link {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.danhmuc_qc img {
+    height: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+}
+
+.danhmuc_qc:hover img {
+    transform: scale(1.04);
+}
+
+/* Nhãn chú thích trên từng danh mục */
+.danhmuc_label {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Danh mục 1 (Banner trọn bộ sưu tập) */
+.danhmuc1 {
+    grid-area: dm1;
+    background: #111111;
+}
+
+.danhmuc1 .danhmuc_link {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 24px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: background 0.2s;
+}
+
+.danhmuc1:hover .danhmuc_link {
+    color: var(--accent);
+}
+
+.danhmuc1 .danhmuc_link i {
+    font-size: 20px;
+    transition: transform 0.2s;
+}
+
+.danhmuc1:hover .danhmuc_link i {
+    transform: translateX(4px);
+}
+
+.danhmuc2 { grid-area: dm2; }
+.danhmuc3 { grid-area: dm3; }
+.danhmuc4 { grid-area: dm4; }
+
+/* ==========================================================================
+   4. KHUNG CHỨA SẢN PHẨM MỚI & BÁN CHẠY
+   ========================================================================== */
+.khungchua_sp_moi,
+.khungchua_sp_banchay {
+    margin: 40px 0;
+}
+
+.khung_sp_moi,
+.khung_sp_banchay {
+    background-color: transparent;
+    height: auto;
+    min-height: auto;
+}
+
+/* Grid chứa các thẻ sản phẩm (product cards) */
+.sp_moi,
+.sp_banchay {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 18px;
+}
+
+/* Đồng bộ định dạng thẻ product_cards theo chuẩn web */
+.sp_moi .product_cards,
+.sp_banchay .product_cards {
+    background: var(--bg-soft);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sp_moi .product_cards:hover,
+.sp_banchay .product_cards:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sp_moi .card_img img,
+.sp_banchay .card_img img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.sp_moi .product_cards:hover .card_img img,
+.sp_banchay .product_cards:hover .card_img img {
+    transform: scale(1.03);
+}
+
+.sp_moi .card_info,
+.sp_banchay .card_info {
+    padding-top: 10px;
+}
+
+.sp_moi .cat_title,
+.sp_banchay .cat_title {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.sp_moi .prod_name,
+.sp_banchay .prod_name {
+    margin: 4px 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.sp_moi .prod_name a,
+.sp_banchay .prod_name a {
+    color: var(--text);
+}
+
+.sp_moi .prod_name a:hover,
+.sp_banchay .prod_name a:hover {
+    color: var(--accent);
+}
+
+.sp_moi .price_tag,
+.sp_banchay .price_tag {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 4px 0 8px;
+}
+
+.sp_moi .price_current,
+.sp_banchay .price_current {
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--text);
+}
+
+.sp_moi .price_tag_sale .price_current,
+.sp_banchay .price_tag_sale .price_current {
+    color: #e53935;
+}
+
+.sp_moi .price_original,
+.sp_banchay .price_original {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.sp_moi .fav-btn,
+.sp_banchay .fav-btn {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.sp_moi .fav-btn.is-fav,
+.sp_banchay .fav-btn.is-fav {
+    color: #e0245e;
+}
+
+.thongbao_trong {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted);
+    padding: 30px;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   5. THANH LỢI ÍCH — Đồng bộ với trang home
+   ========================================================================== */
+.gd_benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 24px 0;
+}
+
+.gd_benefit_item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.gd_benefit_icon {
+    font-size: 22px;
+    color: var(--text);
+    flex-shrink: 0;
+    width: 36px;
+    text-align: center;
+}
+
+.gd_benefit_item h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.gd_benefit_item p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   6. HEADER SECTION (tiêu đề + nút "Xem tất cả")
+   ========================================================================== */
+.gd_section_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 0;
+}
+
+/* Điều chỉnh h1#text_danhmuc khi nằm trong gd_section_header bỏ margin-bottom */
+.gd_section_header #text_danhmuc {
+    margin-bottom: 0;
+}
+
+.gd_xem_them {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: underline;
+    white-space: nowrap;
+    padding-bottom: 4px;
+    transition: color 0.2s;
+}
+
+.gd_xem_them:hover {
+    color: var(--accent);
+}
+
+/* ==========================================================================
+   7. KHUNG GIỚI THIỆU (VỀ CHÚNG TÔI)
+   ========================================================================== */
+.khung_gioithieu {
+    background-color: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 32px 36px;
+    margin: 40px 0 20px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-areas:
+        "text_gt text_gt"
+        "logo_gt noidung_gt";
+    gap: 20px 32px;
+    align-items: center;
+}
+
+.text_gioithieu {
+    grid-area: text_gt;
+    background-color: transparent;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+    text-align: left;
+}
+
+.text_gioithieu h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+.logo_gioithieu {
+    grid-area: logo_gt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 16px;
+    width: 100%;
+    color: var(--text);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.logo_box i {
+    font-size: 38px;
+    color: var(--accent);
+}
+
+.logo_box strong {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.logo_box small {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.noidung_gioithieu {
+    grid-area: noidung_gt;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #333333;
+}
+
+.noidung_gioithieu p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   8. RESPONSIVE CHO CÁC THIẾT BỊ (TABLET & MOBILE)
+   ========================================================================== */
+
+/* Tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .khung_quangcao {
+        height: 380px;
+    }
+
+    .slide_title {
+        font-size: 30px;
+    }
+
+    .gd_benefits {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .khung_danhmuc_qc {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+            "dm1 dm2"
+            "dm4 dm3";
+        gap: 16px;
+    }
+
+    .sp_moi,
+    .sp_banchay {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .khung_gioithieu {
+        grid-template-columns: 200px 1fr;
+        padding: 24px;
+        gap: 20px;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+    .giaodien_main {
+        width: calc(100% - 24px);
+        padding-bottom: 40px;
+    }
+
+    .khung_quangcao {
+        height: 300px;
+    }
+
+    .noidung_quangcao {
+        padding: 18px;
+        max-width: 100%;
+        gap: 8px;
+    }
+
+    .slide_title {
+        font-size: 20px;
+    }
+
+    .slide_desc {
+        font-size: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .slide_btn_cta {
+        padding: 8px 16px;
+        font-size: 11px;
+    }
+
+    .nut_chuyen {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .nut_truoc { left: 8px; }
+    .nut_sau   { right: 8px; }
+
+    .gd_benefits {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    #text_danhmuc {
+        font-size: 17px;
+        margin: 16px 0 10px;
+    }
+
+    .gd_section_header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .khung_danhmuc_qc {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "dm1"
+            "dm2"
+            "dm3"
+            "dm4";
+        gap: 12px;
+    }
+
+    .danhmuc_qc {
+        min-height: 130px;
+    }
+
+    .sp_moi,
+    .sp_banchay {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .khung_gioithieu {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "text_gt"
+            "logo_gt"
+            "noidung_gt";
+        padding: 20px;
+        gap: 16px;
+    }
+
+    .text_gioithieu {
+        text-align: center;
+    }
+
+    .noidung_gioithieu {
+        text-align: center;
+        font-size: 14px;
+    }
+}
+
+/* Màn hình rất nhỏ (< 400px): 1 cột sản phẩm */
+@media (max-width: 400px) {
+    .sp_moi,
+    .sp_banchay {
+        grid-template-columns: 1fr;
+    }
+}
