@@ -110,7 +110,7 @@ $fmtMin = function (int $m): string { return $m >= 60 ? intdiv($m, 60) . ' giờ
       $expireIn  = ($o['order_status'] === 'pending' && $o['payment_status'] === 'unpaid' && $isOnline && AUTO_CANCEL_UNPAID_HOURS > 0)
                    ? AUTO_CANCEL_UNPAID_HOURS * 60 - $age : null;
   ?>
-  <section class="order-card <?php echo $isStale ? 'is-stale' : ''; ?>">
+  <section class="order-card <?php echo $isStale ? 'is-stale' : ''; ?>" id="adminOrderCard-<?php echo $oid; ?>">
     <header class="order-head">
       <div>
         <label class="check-inline"><input type="checkbox" class="bulk-check" name="ids[]" value="<?php echo $oid; ?>" form="bulkForm"></label>
@@ -122,8 +122,8 @@ $fmtMin = function (int $m): string { return $m >= 60 ? intdiv($m, 60) . ' giờ
         <?php if ($expireIn !== null): ?>
           <span class="badge badge-pending"><?php echo $expireIn > 0 ? 'Tự hủy sau ' . e($fmtMin($expireIn)) : 'Sắp bị hủy tự động'; ?></span>
         <?php endif; ?>
-        <span class="badge badge-<?php echo e($o['order_status']); ?>"><?php echo e(ORDER_STATUS[$o['order_status']] ?? $o['order_status']); ?></span>
-        <span class="badge badge-pay-<?php echo e($o['payment_status']); ?>"><?php echo e(PAYMENT_STATUS[$o['payment_status']] ?? $o['payment_status']); ?></span>
+        <span class="badge badge-<?php echo e($o['order_status']); ?> order-status-badge"><?php echo e(ORDER_STATUS[$o['order_status']] ?? $o['order_status']); ?></span>
+        <span class="badge badge-pay-<?php echo e($o['payment_status']); ?> order-pay-badge"><?php echo e(PAYMENT_STATUS[$o['payment_status']] ?? $o['payment_status']); ?></span>
       </div>
     </header>
 
@@ -226,6 +226,55 @@ $fmtMin = function (int $m): string { return $m >= 60 ? intdiv($m, 60) . ' giờ
       var act = e.submitter ? e.submitter.value : '';
       if (n === 0) { alert('Bạn chưa chọn đơn hàng nào.'); e.preventDefault(); return; }
       if (act === 'cancelled' && !confirm('Hủy ' + n + ' đơn đã chọn? Kho và voucher sẽ được hoàn lại.')) e.preventDefault();
+    });
+
+    // AJAX: Cập nhật trạng thái từng đơn hàng không tải lại trang
+    document.querySelectorAll('.act-form').forEach(function(form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = form.querySelector('button[type="submit"]');
+        var originalText = btn.textContent;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        var fd = new FormData(form);
+
+        ajaxPost('index.php', fd)
+          .then(function(res) {
+            btn.disabled = false;
+            btn.textContent = originalText;
+            if (res.success) {
+              showToast(res.message, 'success');
+              var card = document.getElementById('adminOrderCard-' + res.order_id);
+              if (card) {
+                if (res.new_status) {
+                  var stBadge = card.querySelector('.order-status-badge');
+                  if (stBadge) {
+                    stBadge.className = 'badge badge-' + res.new_status + ' order-status-badge';
+                    stBadge.textContent = res.status_label;
+                  }
+                }
+                if (res.payment_status) {
+                  var payBadge = card.querySelector('.order-pay-badge');
+                  if (payBadge) {
+                    payBadge.className = 'badge badge-pay-' + res.payment_status + ' order-pay-badge';
+                    payBadge.textContent = res.payment_label;
+                  }
+                }
+                // Làm mờ form sau khi thao tác xong
+                form.style.opacity = '0.4';
+                form.style.pointerEvents = 'none';
+              }
+            } else {
+              showToast(res.message || 'Thao tác không thành công', 'error');
+            }
+          })
+          .catch(function() {
+            btn.disabled = false;
+            btn.textContent = originalText;
+            showToast('Lỗi kết nối máy chủ', 'error');
+          });
+      });
     });
   })();
 </script>

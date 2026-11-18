@@ -141,5 +141,7 @@ if (($current_page['auth'] ?? '') === 'login') {
     <?php include __DIR__ . '/app/components/chatbot.php'; ?>
 
   </div>
+  <!-- JavaScript dùng chung cho các chức năng AJAX -->
+  <script src="public/assets/js/main.js?v=<?php echo @filemtime(__DIR__ . '/public/assets/js/main.js') ?: 1; ?>"></script>
 </body>
 </html>

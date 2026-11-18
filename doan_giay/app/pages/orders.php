@@ -26,14 +26,14 @@ if ($orders) {
   <?php endif; ?>
 
   <?php foreach ($orders as $o): ?>
-    <section class="order-card">
+    <section class="order-card" id="orderSection-<?php echo (int)$o['order_id']; ?>">
       <header class="order-head">
         <div>
           <strong>Đơn #<?php echo (int)$o['order_id']; ?></strong>
           <span class="muted"> · <?php echo e(date('d/m/Y H:i', strtotime($o['created_at']))); ?></span>
         </div>
         <div>
-          <span class="badge badge-<?php echo e($o['order_status']); ?>"><?php echo e(ORDER_STATUS[$o['order_status']] ?? $o['order_status']); ?></span>
+          <span class="badge badge-<?php echo e($o['order_status']); ?> order-status-badge"><?php echo e(ORDER_STATUS[$o['order_status']] ?? $o['order_status']); ?></span>
           <span class="badge badge-pay-<?php echo e($o['payment_status']); ?>"><?php echo e(PAYMENT_STATUS[$o['payment_status']] ?? $o['payment_status']); ?></span>
         </div>
       </header>
@@ -90,7 +90,7 @@ if ($orders) {
 
   <!-- Hộp thoại xác nhận Hủy đơn hàng (dùng thẻ dialog chuẩn HTML5) -->
   <dialog id="cancelModal" style="border:none;border-radius:12px;padding:24px;box-shadow:0 10px 25px rgba(0,0,0,0.25);max-width:440px;width:90%;">
-    <form method="post" action="index.php" class="form-stack">
+    <form method="post" action="index.php" class="form-stack" onsubmit="handleAjaxCancelOrder(event)">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="action" value="cancel_order">
       <input type="hidden" name="order_id" id="cancelOrderIdInput" value="0">
@@ -111,7 +111,7 @@ if ($orders) {
       </label>
 
       <div class="btn-row" style="margin-top:18px;display:flex;gap:10px;">
-        <button type="submit" class="btn btn-dark" style="background:#c62828;border-color:#c62828;">Xác nhận hủy đơn</button>
+        <button type="submit" id="btnConfirmCancel" class="btn btn-dark" style="background:#c62828;border-color:#c62828;">Xác nhận hủy đơn</button>
         <button type="button" class="btn btn-light" onclick="document.getElementById('cancelModal').close()">Giữ lại đơn</button>
       </div>
     </form>
@@ -127,6 +127,51 @@ if ($orders) {
       if (text) text.textContent = '#' + orderId;
       modal.showModal();
     }
+  }
+
+  // AJAX: Hủy đơn hàng phía khách hàng không tải lại trang
+  function handleAjaxCancelOrder(event) {
+    event.preventDefault();
+    var form  = event.target;
+    var modal = document.getElementById('cancelModal');
+    var btn   = document.getElementById('btnConfirmCancel');
+    var orderId = document.getElementById('cancelOrderIdInput').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Đang xử lý...';
+
+    var fd = new FormData(form);
+
+    ajaxPost('index.php', fd)
+      .then(function(res) {
+        btn.disabled = false;
+        btn.textContent = 'Xác nhận hủy đơn';
+        if (modal) modal.close();
+
+        if (res.success) {
+          showToast(res.message, 'info');
+          // Cập nhật trạng thái trên giao diện
+          var sec = document.getElementById('orderSection-' + orderId);
+          if (sec) {
+            var badge = sec.querySelector('.order-status-badge');
+            if (badge) {
+              badge.className = 'badge badge-cancelled order-status-badge';
+              badge.textContent = res.status_label || 'Đã hủy';
+            }
+            // Ẩn nút Hủy đơn
+            var cancelBtn = sec.querySelector('button[onclick*="openCancelModal"]');
+            if (cancelBtn) cancelBtn.remove();
+          }
+        } else {
+          showToast(res.message || 'Không thể hủy đơn', 'error');
+        }
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.textContent = 'Xác nhận hủy đơn';
+        if (modal) modal.close();
+        showToast('Lỗi kết nối máy chủ', 'error');
+      });
   }
   </script>
 </main>

@@ -15,9 +15,19 @@ $rows = db()->query(
   <h1>Quản trị</h1>
   <?php include __DIR__ . '/../../components/admin_nav.php'; ?>
 
-  <p><a class="btn btn-dark" href="index.php?page=admin_product_form">+ Thêm sản phẩm</a></p>
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+    <a class="btn btn-dark" href="index.php?page=admin_product_form">+ Thêm sản phẩm</a>
+    
+    <!-- Ô tìm kiếm tức thì (Live search bằng JavaScript) -->
+    <div style="position:relative; max-width:360px; width:100%;">
+      <input type="search" id="productQuickSearch" placeholder="Tìm nhanh tên, ID, danh mục..." 
+             style="width:100%; height:38px; padding:6px 12px 6px 34px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px;">
+      <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:12px; top:12px; color:#94a3b8; font-size:14px;"></i>
+    </div>
+  </div>
+
   <div class="table-scroll">
-  <table class="table">
+  <table class="table" id="productsTable">
     <thead><tr><th>ID</th><th>Ảnh</th><th>Tên</th><th>Nhãn</th><th>Danh mục</th><th>Đối tượng</th><th>Giá</th><th>Biến thể</th><th>Tổng tồn</th><th>Trạng thái</th><th></th></tr></thead>
     <tbody>
     <?php foreach ($rows as $r): 
@@ -26,7 +36,7 @@ $rows = db()->query(
       $hasSale = ($saleP > 0 && $saleP < $baseP);
       $pct = $hasSale ? (int)round((1 - $saleP / $baseP) * 100) : 0;
     ?>
-      <tr>
+      <tr id="productRow-<?php echo (int)$r['product_id']; ?>">
         <td><?php echo (int)$r['product_id']; ?></td>
         <td><img class="thumb-sm" src="<?php echo e(img_url($r['thumbnail'])); ?>" alt="" onerror="this.onerror=null; this.src='public/assets/imgs/placeholder.svg';"></td>
         <td><b><?php echo e($r['name']); ?></b></td>
@@ -53,14 +63,18 @@ $rows = db()->query(
         </td>
         <td><?php echo (int)$r['variant_count']; ?></td>
         <td><?php echo (int)$r['total_stock']; ?></td>
-        <td><span class="badge <?php echo $r['status'] === 'active' ? 'badge-delivered' : 'badge-cancelled'; ?>"><?php echo $r['status'] === 'active' ? 'Đang bán' : 'Đã ẩn'; ?></span></td>
+        <td>
+          <span class="badge status-badge <?php echo $r['status'] === 'active' ? 'badge-delivered' : 'badge-cancelled'; ?>">
+            <?php echo $r['status'] === 'active' ? 'Đang bán' : 'Đã ẩn'; ?>
+          </span>
+        </td>
         <td class="nowrap">
           <a class="btn btn-light btn-sm" href="index.php?page=admin_product_form&id=<?php echo (int)$r['product_id']; ?>">Sửa</a>
-          <form method="post" action="index.php" class="inline-form">
+          <form method="post" action="index.php" class="inline-form ajax-toggle-form" onsubmit="handleAjaxProductToggle(event)">
             <?php echo csrf_field(); ?>
             <input type="hidden" name="action" value="admin_product_toggle">
             <input type="hidden" name="product_id" value="<?php echo (int)$r['product_id']; ?>">
-            <button type="submit" class="btn btn-light btn-sm"><?php echo $r['status'] === 'active' ? 'Ẩn' : 'Hiện'; ?></button>
+            <button type="submit" class="btn btn-light btn-sm btn-toggle-status"><?php echo $r['status'] === 'active' ? 'Ẩn' : 'Hiện'; ?></button>
           </form>
         </td>
       </tr>
@@ -69,3 +83,53 @@ $rows = db()->query(
   </table>
   </div>
 </main>
+
+<script>
+// 1. AJAX: Đổi trạng thái Ẩn / Hiện sản phẩm ngay tức thì không cần tải lại toàn bộ trang
+function handleAjaxProductToggle(event) {
+  event.preventDefault(); // Chặn hành vi submit mặc định
+  var form = event.target;
+  var btn  = form.querySelector('.btn-toggle-status');
+  var originalText = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+  var fd = new FormData(form);
+
+  ajaxPost('index.php', fd)
+    .then(function(res) {
+      btn.disabled = false;
+      if (res.success) {
+        showToast(res.message, 'success');
+        // Tìm dòng sản phẩm trong bảng
+        var row = document.getElementById('productRow-' + res.product_id);
+        if (row) {
+          var badge = row.querySelector('.status-badge');
+          if (badge) {
+            badge.className = 'badge status-badge ' + (res.status === 'active' ? 'badge-delivered' : 'badge-cancelled');
+            badge.textContent = res.status_label;
+          }
+          btn.textContent = res.btn_text;
+        }
+      } else {
+        btn.textContent = originalText;
+        showToast(res.message || 'Lỗi đổi trạng thái', 'error');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = originalText;
+      showToast('Lỗi kết nối máy chủ', 'error');
+    });
+}
+
+// 2. Tìm kiếm nhanh trên bảng sản phẩm (Client-side live filter)
+document.getElementById('productQuickSearch').addEventListener('input', function() {
+  var term = this.value.toLowerCase().trim();
+  var rows = document.querySelectorAll('#productsTable tbody tr');
+  rows.forEach(function(row) {
+    var text = row.textContent.toLowerCase();
+    row.style.display = text.indexOf(term) !== -1 ? '' : 'none';
+  });
+});
+</script>

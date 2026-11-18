@@ -50,6 +50,23 @@ function redirect(string $url): void
     exit;
 }
 
+// Kiểm tra xem yêu cầu gửi đến có phải là AJAX (fetch / XMLHttpRequest) hay không
+function is_ajax(): bool
+{
+    return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+        || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+        || (isset($_POST['ajax']) && $_POST['ajax'] === '1');
+}
+
+// Hàm trả về phản hồi định dạng JSON cho AJAX kèm mã trạng thái HTTP
+function json_response(array $data, int $status_code = 200): void
+{
+    http_response_code($status_code);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // Lấy dữ liệu POST/GET dạng chuỗi (nếu người dùng gửi mảng thì coi như rỗng, tránh lỗi)
 function post_str(string $key): string
 {
@@ -150,8 +167,11 @@ function csrf_field(): string
 
 function csrf_verify(): void
 {
-    $sent = $_POST['csrf_token'] ?? '';
+    $sent = $_POST['csrf_token'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
     if (!is_string($sent) || !hash_equals(csrf_token(), $sent)) {
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => 'Phiên làm việc đã hết hạn hoặc CSRF không hợp lệ. Vui lòng tải lại trang.'], 419);
+        }
         http_response_code(419);
         exit('Phiên làm việc đã hết hạn hoặc yêu cầu không hợp lệ. Hãy quay lại, tải lại trang rồi thử lại.');
     }
@@ -187,6 +207,9 @@ function require_staff(): void
         require_login();
     }
     if (!is_staff()) {
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => 'Bạn không có quyền truy cập khu vực này.'], 403);
+        }
         http_response_code(403);
         exit('<h2 style="font-family:sans-serif;padding:40px">403 - Bạn không có quyền truy cập khu vực này.</h2>');
     }
@@ -195,6 +218,9 @@ function require_staff(): void
 function require_login(): void
 {
     if (!is_logged_in()) {
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => 'Vui lòng đăng nhập để tiếp tục.', 'redirect' => 'index.php?page=login'], 401);
+        }
         flash_set('error', 'Vui lòng đăng nhập để tiếp tục.');
         redirect('index.php?page=login&return=' . urlencode(safe_return_url(current_relative_url())));
     }
@@ -206,6 +232,9 @@ function require_admin(): void
         require_login();
     }
     if (!is_admin()) {
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => 'Bạn không có quyền quản trị viên.'], 403);
+        }
         http_response_code(403);
         exit('<h2 style="font-family:sans-serif;padding:40px">403 - Bạn không có quyền truy cập khu vực này.</h2>');
     }

@@ -61,9 +61,11 @@ $form += ['note' => '', 'payment_method' => 'COD'];
     </div>
   <?php else: ?>
   <div class="checkout-layout">
-    <form method="post" action="index.php" class="form-card form-stack" id="checkoutForm">
+    <form method="post" action="index.php" class="form-card form-stack" id="checkoutForm" onsubmit="handleAjaxCheckout(event)">
       <?php echo csrf_field(); ?>
       <input type="hidden" name="action" value="place_order">
+
+      <div id="checkoutErrorBox" style="display:none;margin-bottom:14px;padding:12px;border-radius:8px;font-size:14px;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;"></div>
 
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2>Thông tin giao hàng</h2>
@@ -97,7 +99,7 @@ $form += ['note' => '', 'payment_method' => 'COD'];
       <?php if ($has_problem): ?>
         <div class="flash flash-error">Giỏ hàng có sản phẩm không còn đủ hàng. <a href="index.php?page=cart">Quay lại giỏ hàng</a> để chỉnh sửa.</div>
       <?php else: ?>
-        <button type="submit" class="btn btn-dark btn-block" id="placeOrderBtn">Đặt hàng · <?php echo e(format_vnd($totals['final'])); ?></button>
+        <button type="submit" class="btn btn-dark btn-block" id="placeOrderBtn">Đặt hàng · <span id="btnFinalTotal"><?php echo e(format_vnd($totals['final'])); ?></span></button>
       <?php endif; ?>
     </form>
 
@@ -113,18 +115,54 @@ $form += ['note' => '', 'payment_method' => 'COD'];
           <span><?php echo e(format_vnd($l['line_total'])); ?></span>
         </div>
       <?php endforeach; ?>
-      <div class="summary-row"><span>Tạm tính</span><strong><?php echo e(format_vnd($totals['subtotal'])); ?></strong></div>
-      <div class="summary-row"><span>Phí vận chuyển</span><strong><?php echo $totals['shipping'] > 0 ? e(format_vnd($totals['shipping'])) : 'Miễn phí'; ?></strong></div>
-      <div class="summary-row"><span>Giảm giá<?php echo $voucher ? ' (' . e($voucher['code']) . ')' : ''; ?></span><strong>−<?php echo e(format_vnd($totals['discount'])); ?></strong></div>
-      <div class="summary-row total-row"><span>Tổng cộng</span><strong><?php echo e(format_vnd($totals['final'])); ?></strong></div>
+      <div class="summary-row"><span>Tạm tính</span><strong id="ckSubtotal"><?php echo e(format_vnd($totals['subtotal'])); ?></strong></div>
+      <div class="summary-row"><span>Phí vận chuyển</span><strong id="ckShipping"><?php echo $totals['shipping'] > 0 ? e(format_vnd($totals['shipping'])) : 'Miễn phí'; ?></strong></div>
+      <div class="summary-row"><span>Giảm giá</span><strong id="ckDiscount">−<?php echo e(format_vnd($totals['discount'])); ?></strong></div>
+      <div class="summary-row total-row"><span>Tổng cộng</span><strong id="ckFinal"><?php echo e(format_vnd($totals['final'])); ?></strong></div>
     </aside>
   </div>
+
   <script>
-    // Chống bấm "Đặt hàng" nhiều lần liên tiếp (server vẫn có transaction để bảo vệ, đây chỉ là tiện lợi cho người dùng)
-    document.getElementById('checkoutForm').addEventListener('submit', function () {
-      var b = document.getElementById('placeOrderBtn');
-      if (b) { b.disabled = true; b.textContent = 'Đang xử lý...'; }
-    });
+  // Xử lý Đặt hàng qua AJAX không tải lại trang
+  function handleAjaxCheckout(event) {
+    event.preventDefault(); // Chặn hành vi submit mặc định
+    var form = event.target;
+    var btn = document.getElementById('placeOrderBtn');
+    var errBox = document.getElementById('checkoutErrorBox');
+
+    btn.disabled = true;
+    var originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý đơn hàng...';
+    errBox.style.display = 'none';
+
+    var fd = new FormData(form);
+
+    ajaxPost('index.php', fd)
+      .then(function(res) {
+        if (res.success) {
+          showToast(res.message, 'success');
+          // Chuyển hướng tới trang thành công / thanh toán
+          setTimeout(function() {
+            window.location.href = res.redirect || ('index.php?page=order_success&id=' + res.order_id);
+          }, 600);
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+          errBox.style.display = 'block';
+          errBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> ' + res.message;
+          showToast(res.message, 'error');
+          // Cuộn mượt tới vị trí thông báo lỗi
+          errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        errBox.style.display = 'block';
+        errBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Lỗi kết nối máy chủ. Vui lòng thử lại.';
+        showToast('Lỗi kết nối máy chủ', 'error');
+      });
+  }
   </script>
   <?php endif; ?>
 </main>

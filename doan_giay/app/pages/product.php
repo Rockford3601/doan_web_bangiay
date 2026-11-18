@@ -595,6 +595,48 @@ if (!function_exists('pd_size_pill')) {
         }
       }
     })();
+
+    // AJAX: Thêm vào giỏ hàng không tải lại trang
+    var btnAdd = document.getElementById('btnAddToCart');
+    if (btnAdd) {
+      btnAdd.addEventListener('click', function (e) {
+        if (!window.validateBuyForm()) {
+          e.preventDefault();
+          return;
+        }
+        e.preventDefault();
+        var form = document.getElementById('buyForm');
+        var fd = new FormData(form);
+
+        var originalText = btnAdd.textContent;
+        btnAdd.disabled = true;
+        btnAdd.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang thêm...';
+
+        ajaxPost('index.php', fd)
+          .then(function (res) {
+            btnAdd.disabled = false;
+            btnAdd.textContent = originalText;
+            if (res.success) {
+              showToast(res.message, 'success');
+              // Cập nhật số lượng trên icon giỏ hàng header
+              document.querySelectorAll('.cart-count').forEach(function (el) {
+                el.textContent = res.cart_count;
+              });
+            } else {
+              if (res.redirect) {
+                window.location.href = res.redirect;
+              } else {
+                showToast(res.message || 'Lỗi thêm vào giỏ', 'error');
+              }
+            }
+          })
+          .catch(function () {
+            btnAdd.disabled = false;
+            btnAdd.textContent = originalText;
+            showToast('Lỗi kết nối máy chủ', 'error');
+          });
+      });
+    }
     // ---- Size Guide Modal ----
     (function () {
       var modal   = document.getElementById('sizeGuideModal');

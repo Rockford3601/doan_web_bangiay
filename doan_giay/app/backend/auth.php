@@ -80,6 +80,9 @@ function action_register(): void
     }
 
     if ($errors) {
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => implode('<br>', $errors), 'errors' => $errors]);
+        }
         foreach ($errors as $err) {
             flash_set('error', $err);
         }
@@ -104,12 +107,20 @@ function action_register(): void
         $pdo->commit();
     } catch (PDOException $e) {
         if ($pdo->inTransaction()) $pdo->rollBack();
-        flash_set('error', 'Tên đăng nhập hoặc email đã được sử dụng.');
+        $msg = 'Tên đăng nhập hoặc email đã được sử dụng.';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $msg]);
+        }
+        flash_set('error', $msg);
         redirect('index.php?page=register');
     } catch (Throwable $e) {
         if ($pdo->inTransaction()) $pdo->rollBack();
         error_log('register loi: ' . $e->getMessage());
-        flash_set('error', 'Không thể hoàn tất đăng ký lúc này.');
+        $msg = 'Không thể hoàn tất đăng ký lúc này.';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $msg]);
+        }
+        flash_set('error', $msg);
         redirect('index.php?page=register');
     }
 
@@ -119,8 +130,37 @@ function action_register(): void
     mail_send_welcome($user);
 
     login_user($user);
-    flash_set('success', 'Đăng ký thành công! Email thông báo chào mừng đã được gửi đến hộp thư của bạn.');
+    $msg = 'Đăng ký thành công! Email thông báo chào mừng đã được gửi đến hộp thư của bạn.';
+    if (is_ajax()) {
+        json_response([
+            'success'  => true,
+            'message'  => $msg,
+            'redirect' => 'index.php?page=home'
+        ]);
+    }
+    flash_set('success', $msg);
     redirect('index.php?page=home');
+}
+
+// Kiểm tra nhanh username hoặc email đã tồn tại hay chưa bằng AJAX
+function action_check_user_exists(): void
+{
+    $field = post_str('field'); // 'username' hoặc 'email'
+    $value = post_str('value');
+
+    if (!in_array($field, ['username', 'email'], true) || $value === '') {
+        json_response(['exists' => false]);
+    }
+
+    $s = db()->prepare("SELECT COUNT(*) FROM users WHERE {$field} = ?");
+    $s->execute([$value]);
+    $exists = ((int)$s->fetchColumn() > 0);
+
+    json_response([
+        'success' => true,
+        'exists'  => $exists,
+        'message' => $exists ? ($field === 'username' ? 'Tên đăng nhập đã được sử dụng.' : 'Email đã được sử dụng.') : 'Hợp lệ.'
+    ]);
 }
 
 function action_login(): void
@@ -131,11 +171,19 @@ function action_login(): void
     $back     = 'index.php?page=login&return=' . urlencode($return);
 
     if ($ident === '' || $password === '') {
-        flash_set('error', 'Vui lòng nhập tên đăng nhập/email và mật khẩu.');
+        $msg = 'Vui lòng nhập tên đăng nhập/email và mật khẩu.';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $msg]);
+        }
+        flash_set('error', $msg);
         redirect($back);
     }
     if (login_is_locked($ident)) {
-        flash_set('error', 'Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau ' . LOGIN_LOCK_MINUTES . ' phút.');
+        $msg = 'Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau ' . LOGIN_LOCK_MINUTES . ' phút.';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $msg]);
+        }
+        flash_set('error', $msg);
         redirect($back);
     }
 
@@ -146,11 +194,19 @@ function action_login(): void
     $ok = password_verify($password, $user ? $user['password_hash'] : DUMMY_HASH);
     if (!$user || !$ok) {
         login_record_fail($ident);
-        flash_set('error', 'Sai tên đăng nhập hoặc mật khẩu.'); // không nói rõ cái nào sai
+        $msg = 'Sai tên đăng nhập hoặc mật khẩu.';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $msg]);
+        }
+        flash_set('error', $msg); // không nói rõ cái nào sai
         redirect($back);
     }
     if ($user['status'] !== 'active') {
-        flash_set('error', 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ cửa hàng.');
+        $msg = 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ cửa hàng.';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $msg]);
+        }
+        flash_set('error', $msg);
         redirect($back);
     }
 
@@ -161,12 +217,23 @@ function action_login(): void
             ->execute([password_hash($password, PASSWORD_DEFAULT), $user['user_id']]);
     }
     login_user($user);
-    flash_set('success', 'Xin chào, ' . $user['name'] . '!');
+
+    $target = $return;
     // Admin/nhân viên đăng nhập bình thường (không có trang đích riêng) -> vào thẳng Dashboard quản trị
     if (in_array($user['role'], ['admin', 'staff'], true) && $return === 'index.php?page=home') {
-        redirect('index.php?page=admin');
+        $target = 'index.php?page=admin';
     }
-    redirect($return);
+
+    if (is_ajax()) {
+        json_response([
+            'success'  => true,
+            'message'  => 'Xin chào, ' . $user['name'] . '! Đang chuyển hướng...',
+            'redirect' => $target
+        ]);
+    }
+
+    flash_set('success', 'Xin chào, ' . $user['name'] . '!');
+    redirect($target);
 }
 
 function action_logout(): void

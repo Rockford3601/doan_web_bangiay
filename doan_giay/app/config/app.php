@@ -87,6 +87,7 @@ const GENDERS = ['nam' => 'Nam', 'nu' => 'Nữ', 'tre' => 'Trẻ em', 'unisex' =
 $actions = [
     'register'        => 'auth',
     'login'           => 'auth',
+    'check_user_exists' => 'auth',
     'logout'          => 'auth',
     'profile_update'  => 'auth',
     'change_password' => 'auth',

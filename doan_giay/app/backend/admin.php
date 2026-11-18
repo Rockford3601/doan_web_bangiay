@@ -326,8 +326,25 @@ function action_admin_product_save(): void
 function action_admin_product_toggle(): void
 {
     require_staff();
+    $pid = post_int('product_id');
     db()->prepare("UPDATE product SET status = IF(status = 'active', 'inactive', 'active') WHERE product_id = ?")
-        ->execute([post_int('product_id')]);
+        ->execute([$pid]);
+
+    $s = db()->prepare("SELECT status FROM product WHERE product_id = ?");
+    $s->execute([$pid]);
+    $newStatus = $s->fetchColumn();
+
+    if (is_ajax()) {
+        json_response([
+            'success'      => true,
+            'message'      => 'Đã cập nhật trạng thái sản phẩm #' . $pid,
+            'product_id'   => $pid,
+            'status'       => $newStatus,
+            'status_label' => ($newStatus === 'active') ? 'Đang bán' : 'Đã ẩn',
+            'btn_text'     => ($newStatus === 'active') ? 'Ẩn' : 'Hiện'
+        ]);
+    }
+
     flash_set('success', 'Đã đổi trạng thái hiển thị sản phẩm.');
     redirect('index.php?page=admin_products');
 }
@@ -336,6 +353,7 @@ function action_admin_product_toggle(): void
 function action_admin_order_status(): void
 {
     require_staff();
+    $orderId  = post_int('order_id');
     $new      = post_str('new_status');
     $note     = mb_substr(post_str('note'), 0, 200);
     $tracking = post_str('tracking_code');
@@ -343,13 +361,28 @@ function action_admin_order_status(): void
 
     if ($new === 'cancelled') {
         if (mb_strlen($note) < 3) {
-            flash_set('error', 'Vui lòng nhập lý do hủy đơn (tối thiểu 3 ký tự).');
+            $msg = 'Vui lòng nhập lý do hủy đơn (tối thiểu 3 ký tự).';
+            if (is_ajax()) {
+                json_response(['success' => false, 'message' => $msg]);
+            }
+            flash_set('error', $msg);
             redirect($return);
         }
         $note = 'Admin hủy: ' . $note;
     }
-    [$ok, $msg] = change_order_status(post_int('order_id'), $new, (int)$_SESSION['user']['user_id'],
+    [$ok, $msg] = change_order_status($orderId, $new, (int)$_SESSION['user']['user_id'],
                                       $note === '' ? null : $note, $tracking === '' ? null : $tracking);
+
+    if (is_ajax()) {
+        json_response([
+            'success'      => $ok,
+            'message'      => $msg,
+            'order_id'     => $orderId,
+            'new_status'   => $new,
+            'status_label' => ORDER_STATUS[$new] ?? $new
+        ]);
+    }
+
     flash_set($ok ? 'success' : 'error', $msg);
     redirect($return);
 }
@@ -394,7 +427,19 @@ function action_admin_orders_bulk(): void
 function action_admin_order_paid(): void
 {
     require_staff();
-    [$ok, $msg] = mark_order_paid(post_int('order_id'), mb_substr(post_str('transaction_code'), 0, 100));
+    $orderId = post_int('order_id');
+    [$ok, $msg] = mark_order_paid($orderId, mb_substr(post_str('transaction_code'), 0, 100));
+
+    if (is_ajax()) {
+        json_response([
+            'success'        => $ok,
+            'message'        => $msg,
+            'order_id'       => $orderId,
+            'payment_status' => 'paid',
+            'payment_label'  => PAYMENT_STATUS['paid']
+        ]);
+    }
+
     flash_set($ok ? 'success' : 'error', $msg);
     redirect(safe_return_url(post_str('return'), 'index.php?page=admin_orders'));
 }
@@ -402,7 +447,19 @@ function action_admin_order_paid(): void
 function action_admin_order_refund(): void
 {
     require_staff();
-    [$ok, $msg] = mark_order_refunded(post_int('order_id'), mb_substr(post_str('refund_code'), 0, 100), (int)$_SESSION['user']['user_id']);
+    $orderId = post_int('order_id');
+    [$ok, $msg] = mark_order_refunded($orderId, mb_substr(post_str('refund_code'), 0, 100), (int)$_SESSION['user']['user_id']);
+
+    if (is_ajax()) {
+        json_response([
+            'success'        => $ok,
+            'message'        => $msg,
+            'order_id'       => $orderId,
+            'payment_status' => 'refunded',
+            'payment_label'  => PAYMENT_STATUS['refunded']
+        ]);
+    }
+
     flash_set($ok ? 'success' : 'error', $msg);
     redirect(safe_return_url(post_str('return'), 'index.php?page=admin_orders'));
 }

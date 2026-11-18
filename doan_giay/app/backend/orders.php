@@ -49,6 +49,9 @@ function action_place_order(): void
     if (!array_key_exists($method, PAYMENT_METHODS))           $errors[] = 'Vui lòng chọn phương thức thanh toán hợp lệ.';
 
     if ($errors) {
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => implode('<br>', $errors)]);
+        }
         foreach ($errors as $err) {
             flash_set('error', $err);
         }
@@ -145,12 +148,19 @@ function action_place_order(): void
         $pdo->commit();
     } catch (BusinessException $e) {          // lỗi nghiệp vụ do mình chủ động ném: hiện thẳng cho khách
         if ($pdo->inTransaction()) $pdo->rollBack();
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $e->getMessage()]);
+        }
         flash_set('error', $e->getMessage());
         redirect('index.php?page=cart');
     } catch (Throwable $e) {                 // lỗi hệ thống: ghi log, không lộ chi tiết cho khách
         if ($pdo->inTransaction()) $pdo->rollBack();
         error_log('place_order loi: ' . $e->getMessage());
-        flash_set('error', 'Không thể đặt hàng lúc này. Vui lòng thử lại (hoặc kiểm tra mã giảm giá đã dùng chưa).');
+        $sysMsg = 'Không thể đặt hàng lúc này. Vui lòng thử lại (hoặc kiểm tra mã giảm giá đã dùng chưa).';
+        if (is_ajax()) {
+            json_response(['success' => false, 'message' => $sysMsg]);
+        }
+        flash_set('error', $sysMsg);
         redirect('index.php?page=cart');
     }
 
@@ -158,13 +168,24 @@ function action_place_order(): void
     require_once __DIR__ . '/../helpers/mailer.php';
     mail_send_order_notifications($orderId, 'placed');
 
+    $targetRedirect = 'index.php?page=order_success&id=' . $orderId;
     if ($method === WALLET_METHOD) {
-        redirect('index.php?page=pay_sim&id=' . $orderId);   // chuyển sang trang thanh toán ví (mô phỏng)
+        $targetRedirect = 'index.php?page=pay_sim&id=' . $orderId;   // chuyển sang trang thanh toán ví (mô phỏng)
     }
     if ($method === 'Chuyển khoản') {
-        redirect('index.php?page=pay_transfer&id=' . $orderId); // chuyển sang trang quét mã VietQR
+        $targetRedirect = 'index.php?page=pay_transfer&id=' . $orderId; // chuyển sang trang quét mã VietQR
     }
-    redirect('index.php?page=order_success&id=' . $orderId);
+
+    if (is_ajax()) {
+        json_response([
+            'success'  => true,
+            'message'  => 'Đặt hàng thành công! Đang chuyển hướng...',
+            'order_id' => $orderId,
+            'redirect' => $targetRedirect
+        ]);
+    }
+
+    redirect($targetRedirect);
 }
 
 /* =====================================================================
@@ -239,6 +260,15 @@ function action_cancel_order(): void
     $note = 'Khách hủy đơn: ' . mb_substr($reason, 0, 200);
 
     [$ok, $msg] = cancel_order($orderId, (int)$_SESSION['user']['user_id'], false, $note);
+    if (is_ajax()) {
+        json_response([
+            'success'      => $ok,
+            'message'      => $msg,
+            'order_id'     => $orderId,
+            'order_status' => 'cancelled',
+            'status_label' => ORDER_STATUS['cancelled']
+        ]);
+    }
     flash_set($ok ? 'success' : 'error', $msg);
 
     // Nếu hủy từ trang đặt hàng thành công hoặc trang khác, redirect về trang orders
