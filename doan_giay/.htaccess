@@ -1,10 +1,8 @@
-# Bảo vệ thư mục mã nguồn khi DocumentRoot trỏ vào thư mục gốc dự án (cần mod_rewrite, mặc định có trong XAMPP)
 Options -Indexes
 RewriteEngine On
-# Không cho truy cập trực tiếp qua URL vào app/, .git/, docs/
+
 RewriteRule ^(app|\.git|docs|storage|cron)(/|$) - [F,L]
 
-# Không cho tải các file cấu hình/tài liệu/SQL
 <FilesMatch "\.(sql|md|env|log|ini|rar|zip|gitignore)$">
     Require all denied
 </FilesMatch>
